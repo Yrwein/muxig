@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 ####### HELP ########################################################
 #
@@ -21,14 +21,12 @@
 #
 #####################################################################
 
-# set -e
-
 function muxig-git-cui() {
 	tmux splitw
 	tmux send-keys 'watch --no-title --color -n '''0,3''' git status --short -b' C-m
 	tmux splitw
 	tmux send-keys 'watch --no-title --color -n '''1''' git branch' C-m
-	tmux select-layout main-vertical
+	tmux select-layout main-vertical > /dev/null
 	tmux select-pane -t 0
 	muxig-set-pane-width 1 30
 }
@@ -61,7 +59,6 @@ case $COMMAND in
 		tmux start-server
 		tmux set-option -g base-index 1
 		tmux new-session -d -s $SESSION_NAME -n 'git cui'
-		tmux set-option default-path .
 
 		# (1nd) window "git cui"
 		muxig-git-cui
@@ -75,7 +72,7 @@ case $COMMAND in
 		;;
 
 	git-cui)
-		tmux set-window-option default-path `pwd`
+		tmux set-window-option default-path `pwd` > /dev/null
 		muxig-clear-panes
 		muxig-git-cui
 		;;
