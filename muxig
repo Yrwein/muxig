@@ -44,7 +44,11 @@ function muxig-set-pane-width() {
 	pane_width=`tmux list-panes | grep $pane: | cut -dx -f1 | cut -d[ -f2`
 	resize_to=$((pane_width - new_width))
 
-	tmux resize-pane -R $resize_to
+	if [ $resize_to -gt 0 ]; then
+		tmux resize-pane -t $pane -R $resize_to ;
+	else
+		tmux resize-pane -t $pane -L $((- resize_to)) ;
+	fi
 }
 
 COMMAND="$1"
