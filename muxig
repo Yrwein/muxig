@@ -25,9 +25,9 @@
 
 function muxig-git-cui() {
 	tmux splitw
-	tmux send-keys 'watch -n '''0,3''' git s' C-m
+	tmux send-keys 'watch --no-title --color -n '''0,3''' git status --short -b' C-m
 	tmux splitw
-	tmux send-keys 'watch -n '''1''' git branch' C-m
+	tmux send-keys 'watch --no-title --color -n '''1''' git branch' C-m
 	tmux select-layout main-vertical
 	tmux select-pane -t 0
 	muxig-set-pane-width 1 30
