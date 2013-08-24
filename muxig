@@ -4,42 +4,42 @@
 #
 # Command completion (add to .bashrc):
 #
-#   complete -W 'project git-cui clear-panes kill' mux
+#   complete -W 'project git-cui clear-panes kill close' muxig
 #
 # Usage outside tmux:
 #
-#   mux # starts tmux
-#   mux project # create project in current directory
+#   muxig # starts tmux
+#   muxig project # create project in current directory
 #                 # (two windows, the first is git-cui)
 #
 # Usage inside tmux:
 #
-#   mux git-cui # split current window to git console user interface
-#   mux kill # kills tmux
-#   mux clean-panes # kills all panes in window except active
-#   mux close-window # close current window with all panes
+#   muxig git-cui # split current window to git console user interface
+#   muxig kill # kills tmux
+#   muxig clear-panes # kills all panes in window except active
+#   muxig close-window # close current window with all panes
 #
 #####################################################################
 
 # set -e
 
-function mux-git-cui() {
+function muxig-git-cui() {
 	tmux splitw
 	tmux send-keys 'watch -n '''0,3''' git s' C-m
 	tmux splitw
 	tmux send-keys 'watch -n '''1''' git branch' C-m
 	tmux select-layout main-vertical
 	tmux select-pane -t 0
-	mux-set-pane-width 1 30
+	muxig-set-pane-width 1 30
 }
 
-function mux-clear-panes() {
+function muxig-clear-panes() {
 	if [ "`tmux list-panes | wc -l`" != "1" ]; then
 		tmux kill-pane -a -t `tmux list-panes | grep active | cut -d: -f1`
 	fi
 }
 
-function mux-set-pane-width() {
+function muxig-set-pane-width() {
 	pane="$1"
 	new_width="$2"
 
@@ -64,7 +64,7 @@ case $COMMAND in
 		tmux set-option default-path .
 
 		# (1nd) window "git cui"
-		mux-git-cui
+		muxig-git-cui
 
 		# (2nd) window home
 		tmux new-window -n 'home'
@@ -76,12 +76,12 @@ case $COMMAND in
 
 	git-cui)
 		tmux set-window-option default-path `pwd`
-		mux-clear-panes
-		mux-git-cui
+		muxig-clear-panes
+		muxig-git-cui
 		;;
 
 	clear-panes)
-		mux-clear-panes
+		muxig-clear-panes
 		;;
 
 	close-window)
@@ -93,7 +93,7 @@ case $COMMAND in
 		;;
 
 	*)
-		echo mux: Command *$COMMAND* is unknown.
+		echo muxig: Command *$COMMAND* is unknown.
 		;;
 
 esac
