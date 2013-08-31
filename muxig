@@ -1,26 +1,5 @@
 #!/bin/bash -e
 
-####### HELP ########################################################
-#
-# Command completion (add to .bashrc):
-#
-#   complete -W 'project git-cui clear-panes kill close' muxig
-#
-# Usage outside tmux:
-#
-#   muxig # starts tmux
-#   muxig project # create project in current directory
-#                 # (two windows, the first is git-cui)
-#
-# Usage inside tmux:
-#
-#   muxig git-cui # split current window to git console user interface
-#   muxig kill # kills tmux
-#   muxig clear-panes # kills all panes in window except active
-#   muxig close-window # close current window with all panes
-#
-#####################################################################
-
 function muxig-git-cui() {
 	tmux splitw
 	tmux send-keys 'watch --no-title --color -n '''0,3''' git status --short -b' C-m
