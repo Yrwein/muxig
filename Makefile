@@ -14,7 +14,7 @@ build:
 		}
 
 install: build uninstall
-	cp muxig /usr/bin/muxig
+	cp src/muxig.rb /usr/bin/muxig
 	cp MANUAL.1 /usr/share/man/man1/muxig.1
 	echo 'complete -W "project git-cui clear-panes close-window kill" muxig' | tee /etc/bash_completion.d/muxig
 	@echo
