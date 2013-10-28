@@ -17,7 +17,7 @@ module Tmux
 
   def self.make_window(window)
     clear_panes
-    create_window_node window.root
+    create_window_node window
   end
 
   def self.clear_panes

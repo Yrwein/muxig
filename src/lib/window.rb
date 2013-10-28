@@ -1,22 +1,13 @@
 
-class Window
-  attr_reader :root, :name
-
-  def self.pane(window_name, command = nil)
-    pane = Pane.new command, Node::SIZE_SPREADABLE
-
-    new window_name, pane
+module Window
+  def pane(command = nil)
+    Pane.new command, Node::SIZE_SPREADABLE
   end
 
-  def self.split(window_name, split_type, &block)
+  def split(split_type, &block)
     split = Split.new split_type, Node::SIZE_SPREADABLE
     split.instance_eval(&block)
-
-    new window_name, split
-  end
-
-  def initialize(name, root)
-    @name, @root = name, root
+    split
   end
 
   class Node
