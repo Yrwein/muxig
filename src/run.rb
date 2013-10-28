@@ -7,24 +7,6 @@ case command
 when ""
   Tmux.call ""
 
-when "project"
-  session_name = "Git_CUI"
-
-  Tmux.call "start-server"
-  Tmux.call "set-option -g base-index 1"
-  Tmux.call "new-session -d -s #{session_name} -n 'git cui'"
-
-  # (1nd) window "git cui"
-  Tmux.make_window Muxig.git_cui_window
-  Tmux.call "select-pane -t 0"
-
-  # (2nd) window home
-  Tmux.call "new-window -n 'home'"
-  Tmux.call "send-keys -t #{session_name}:2 'cd ~' C-m"
-
-  Tmux.call "select-window -t #{session_name}:1"
-  Tmux.call "-u attach-session"
-
 when "git-cui"
   git_cui = Window.split 'git-cui', :horizontal do
     pane

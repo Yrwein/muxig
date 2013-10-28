@@ -20,12 +20,6 @@ manipulating with branches and the third pane.
 
 Without command muxig just starts tmux.
 
-Command list for use outside tmux:
-
- * **project**:
-     create project in current directory
-     (two windows, the first is git-cui)
-
 Command list for use inside tmux:
 
  * **git-cui**:
