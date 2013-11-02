@@ -31,6 +31,19 @@ Command list for use inside tmux:
  * **close-window**:
      close current window with all panes
 
+## OWN COMMANDS
+
+Just create ~/.muxig.rb - it will be loaded with each muxig run.
+Conf file has plain ruby syntax with possibility to add own commands:
+
+    windows['git-cui'] = split :horizontal do
+      pane
+      split :vertical, 30 do
+        pane "watch --no-title --color -n '0,3' git status --short -b"
+        pane "watch --no-title --color -n '1' git branch"
+      end
+    end
+
 ## AUTHORS
 
 The first version of muxig was based on "output" of tmuxinator tool by
