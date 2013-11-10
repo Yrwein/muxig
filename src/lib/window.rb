@@ -1,7 +1,7 @@
 
 module Window
-  def pane(command = nil)
-    Pane.new command, Node::SIZE_SPREADABLE
+  def pane(new_command = nil)
+    Pane.new new_command, Node::SIZE_SPREADABLE
   end
 
   def split(split_type, &block)
@@ -14,18 +14,22 @@ module Window
     SIZE_SPREADABLE = 0
 
     attr_reader :size
+    attr_reader :commands
 
     def initialize(size)
       @size = size
+      @commands = []
+    end
+
+    def command(new_command)
+      @commands.push new_command if new_command
     end
   end
 
   class Pane < Node
-    attr_reader :command
-
-    def initialize(command, size)
+    def initialize(new_command, size)
       super size
-      @command = command
+      command new_command
     end
   end
 
@@ -41,8 +45,8 @@ module Window
       @nodes = []
     end
 
-    def pane(command = nil, size = Node::SIZE_SPREADABLE)
-      @nodes.push Pane.new command, size
+    def pane(new_command = nil, size = Node::SIZE_SPREADABLE)
+      @nodes.push Pane.new new_command, size
     end
 
     def split(type, size = Node.SIZE_SPREADABLE, &block)

@@ -9,7 +9,7 @@ class TestLayout < Test::Unit::TestCase
     node = Window.pane 'echo foo'
 
     assert_instance_of Window::Pane, node
-    assert_equal 'echo foo', node.command
+    assert_equal ['echo foo'], node.commands
     assert_equal Window::Node::SIZE_SPREADABLE, node.size
   end
 
@@ -22,8 +22,8 @@ class TestLayout < Test::Unit::TestCase
     assert_instance_of Window::Split, node
     assert_equal :horizontal, node.type
     assert_equal 2, node.nodes.count
-    assert_equal 'echo foo', node.nodes[0].command
-    assert_equal 'echo bar', node.nodes[1].command
+    assert_equal ['echo foo'], node.nodes[0].commands
+    assert_equal ['echo bar'], node.nodes[1].commands
   end
 
   def test_split_nested
@@ -37,7 +37,13 @@ class TestLayout < Test::Unit::TestCase
 
     assert_instance_of Window::Pane, node.nodes[0]
     assert_instance_of Window::Split, node.nodes[1]
-    assert_equal 'git watch status', node.nodes[1].nodes[0].command
-    assert_equal 'git watch branch', node.nodes[1].nodes[1].command
+    assert_equal ['git watch status'], node.nodes[1].nodes[0].commands
+    assert_equal ['git watch branch'], node.nodes[1].nodes[1].commands
+  end
+
+  def test_empty_command_adds_nothing_not_nil
+    node = Window.pane nil
+
+    assert_equal [], node.commands
   end
 end

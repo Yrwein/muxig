@@ -28,9 +28,9 @@ module Tmux
   end
 
   def self.create_window_node(node)
-    if node.kind_of? Window::Pane
-      run node.command unless node.command.nil?
-    elsif node.kind_of? Window::Split
+    node.commands.each { |c| run c }
+
+    if node.kind_of? Window::Split
       split_pane = false
       node.nodes.each do |child_node|
         if split_pane
@@ -40,8 +40,6 @@ module Tmux
         create_window_node child_node
         split_pane = true
       end
-    else
-      raise ArgumentError, 'Node is not Window.Pane, or Window.Split'
     end
   end
 
