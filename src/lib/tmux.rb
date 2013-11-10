@@ -4,7 +4,7 @@ require_relative 'window';
 module Tmux
   # Calls system tmux command and returns stripped output
   def self.call(options)
-    `tmux #{options}`.strip!
+    ` tmux #{options}`.strip!
   end
 
   # Executes system command in current pane
@@ -12,7 +12,7 @@ module Tmux
     # f. e. command:
     #    watch --no-title --color -n '1' git branch
     # -> send-keys 'watch --no-title --color -n '''1''' git branch' C-m
-    Tmux.call "send-keys '" + command.sub(/'/, "'''") + "' C-m"
+    Tmux.call "send-keys ' " + command.sub(/'/, "'''") + "' C-m"
   end
 
   def self.make_window(window)
