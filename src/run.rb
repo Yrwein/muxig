@@ -39,9 +39,8 @@ when 'command-list'
   puts 'clear-panes close-window command-list kill ' + windows.keys.join(' ')
 else
   if windows[command]
-    Tmux.call 'set-window-option default-path `pwd` > /dev/null'
-    Tmux.make_window windows[command]
-    Tmux.call 'select-pane -t 0'
+    builder = Tmux::WindowBuilder.new `pwd`.strip!
+    builder.make_window windows[command]
   else
     puts "muxig: Command *#{command}* is unknown."
   end
