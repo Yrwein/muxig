@@ -4,13 +4,13 @@ require_relative '../../src/lib/window.rb'
 
 include Window
 
-class TestLayout < Test::Unit::TestCase
+class TestWindow < Test::Unit::TestCase
   def test_clean_window
     node = Window.pane 'echo foo'
 
     assert_instance_of Window::Pane, node
     assert_equal ['echo foo'], node.commands
-    assert_equal Window::Node::SIZE_SPREADABLE, node.size
+    assert_equal Window::Node::FLEXIBLE_SIZE, node.size
   end
 
   def test_split_with_two_panes

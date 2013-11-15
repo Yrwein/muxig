@@ -1,17 +1,17 @@
 
 module Window
   def pane(new_command = nil)
-    Pane.new new_command, Node::SIZE_SPREADABLE
+    Pane.new new_command, Node::FLEXIBLE_SIZE
   end
 
   def split(split_type, &block)
-    split = Split.new split_type, Node::SIZE_SPREADABLE
+    split = Split.new split_type, Node::FLEXIBLE_SIZE
     split.instance_eval(&block)
     split
   end
 
   class Node
-    SIZE_SPREADABLE = 0
+    FLEXIBLE_SIZE = 0
 
     attr_reader :size
     attr_reader :commands
@@ -45,11 +45,11 @@ module Window
       @nodes = []
     end
 
-    def pane(new_command = nil, size = Node::SIZE_SPREADABLE)
+    def pane(new_command = nil, size = Node::FLEXIBLE_SIZE)
       @nodes.push Pane.new new_command, size
     end
 
-    def split(type, size = Node.SIZE_SPREADABLE, &block)
+    def split(type, size = Node.FLEXIBLE_SIZE, &block)
       split = Split.new type, size
       split.instance_eval(&block)
 

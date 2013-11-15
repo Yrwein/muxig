@@ -41,40 +41,28 @@ module Tmux
       node.commands.each { |c| Tmux.run c }
 
       if node.kind_of? Window::Split
-        split_pane = false
-        node.nodes.each do |child_node|
-          if split_pane
+        node.nodes.each_with_index do |child_node, i|
+          if i != 0
             Tmux.call node.type == :horizontal ? 'splitw -h' : 'splitw -v'
+            Tmux.call 'last-pane'
+            resize_active_pane node.nodes[0].size, node.type unless node.nodes[0].size == Window::Node::FLEXIBLE_SIZE
+            Tmux.call 'last-pane'
           end
-          resize_active_pane child_node.size, node.type unless child_node.size == Window::Node::SIZE_SPREADABLE
+
+          if i == node.nodes.size - 1
+            resize_active_pane child_node.absolute_size, node.type  unless child_node.size == Window::Node::FLEXIBLE_SIZE
+          end
           create_window_node child_node
-          split_pane = true
         end
       end
     end
 
     def resize_active_pane(new_size, type)
-      # TODO refactor
       pane = Tmux.call "list-panes | grep active | cut -d: -f1"
       if type == :horizontal
-        pane_size = Tmux.call "list-panes | grep active | cut -dx -f1 | cut -d[ -f2"
+        Tmux.call "resize-pane -t #{pane} -x #{new_size}"
       else
-        pane_size = Tmux.call "list-panes | grep active | cut -dx -f2 | cut -d] -f1"
-      end
-      resize_to = pane_size.to_i - new_size.to_i
-
-      if type == :horizontal
-        if resize_to > 0
-          Tmux.call "resize-pane -t #{pane} -R #{resize_to}"
-        else
-          Tmux.call "resize-pane -t #{pane} -L #{resize_to.abs}"
-        end
-      else
-        if resize_to > 0
-          Tmux.call "resize-pane -t #{pane} -D #{resize_to}"
-        else
-          Tmux.call "resize-pane -t #{pane} -U #{resize_to.abs}"
-        end
+        Tmux.call "resize-pane -t #{pane} -y #{new_size}"
       end
     end
   end
