@@ -15,6 +15,7 @@ module Window
 
     attr_reader :size
     attr_reader :commands
+    attr_accessor :absolute_size
 
     def initialize(size)
       @size = size

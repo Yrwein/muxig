@@ -1,5 +1,6 @@
 
 require_relative 'window';
+require_relative 'size_helper';
 
 module Tmux
   # Calls system tmux command and returns stripped output
@@ -41,22 +42,25 @@ module Tmux
       node.commands.each { |c| Tmux.run c }
 
       if node.kind_of? Window::Split
+        max_size = get_size node.type
+        SizeHelper.fill_absolute_sizes! max_size, node.nodes
         node.nodes.each_with_index do |child_node, i|
           if i != 0
             Tmux.call node.type == :horizontal ? 'splitw -h' : 'splitw -v'
             Tmux.call 'last-pane'
-            resize_active_pane node.nodes[0].size, node.type unless node.nodes[0].size == Window::Node::FLEXIBLE_SIZE
+            resize_active_pane node.nodes[0].absolute_size, node.type
             Tmux.call 'last-pane'
           end
 
           if i == node.nodes.size - 1
-            resize_active_pane child_node.absolute_size, node.type  unless child_node.size == Window::Node::FLEXIBLE_SIZE
+            resize_active_pane child_node.absolute_size, node.type
           end
           create_window_node child_node
         end
       end
     end
 
+    # Resizes pane to specified width (type horizontal) / height of the current pane
     def resize_active_pane(new_size, type)
       pane = Tmux.call "list-panes | grep active | cut -d: -f1"
       if type == :horizontal
@@ -64,6 +68,16 @@ module Tmux
       else
         Tmux.call "resize-pane -t #{pane} -y #{new_size}"
       end
+    end
+
+    # Returns width (type horizontal) / height of the current pane
+    def get_size(type)
+      if type == :horizontal
+        pane_size = Tmux.call "list-panes | grep active | cut -dx -f1 | cut -d[ -f2"
+      else
+        pane_size = Tmux.call "list-panes | grep active | cut -dx -f2 | cut -d] -f1"
+      end
+      pane_size.to_i
     end
   end
 end
