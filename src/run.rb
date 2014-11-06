@@ -31,9 +31,9 @@ when ''
 when 'clear-panes'
   Tmux.clear_panes
 when 'close-window'
-  Tmux.call 'kill-window'
+  ` tmux list-panes -F "\#{pane_pid}" | xargs kill -9`
 when 'kill'
-  Tmux.call 'kill-session'
+  ` tmux list-panes -s -F "\#{pane_pid}" | xargs kill -9`
 when 'command-list'
   # internal for autocompletion
   puts 'clear-panes close-window command-list kill ' + windows.keys.join(' ')
