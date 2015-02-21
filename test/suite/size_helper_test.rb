@@ -1,5 +1,4 @@
 
-require 'test/unit'
 require_relative '../../src/lib/size_helper.rb'
 require_relative '../../src/lib/window.rb'
 

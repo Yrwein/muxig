@@ -28,6 +28,11 @@ command = ARGV[0]
 case command
 when ''
   Tmux.call ''
+when 'layout'
+  layout = ARGV[1]
+  layout_def = Tmux.layout_checksum(layout) + ',' + layout
+  puts "tmux select-layout \"#{layout_def}\""
+  Tmux.call "select-layout \"#{layout_def}\""
 when 'clear-panes'
   Tmux.clear_panes
 when 'close-window'
@@ -36,7 +41,7 @@ when 'kill'
   ` tmux list-panes -s -F "\#{pane_pid}" | xargs kill -9`
 when 'command-list'
   # internal for autocompletion
-  puts 'clear-panes close-window command-list kill ' + windows.keys.join(' ')
+  puts 'clear-panes close-window command-list kill layout layout-def ' + windows.keys.join(' ')
 else
   if windows[command]
     builder = Tmux::WindowBuilder.new `pwd`.strip!

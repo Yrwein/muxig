@@ -23,6 +23,17 @@ module Tmux
     end
   end
 
+  # See: https://github.com/ThomasAdam/tmux/blob/master/layout-custom.c
+  def self.layout_checksum(layout)
+    sum = 0
+    for char in layout.chars
+      sum = (sum >> 1) + ((sum & 1) << 15)
+      sum += char.ord
+      sum = sum & 0xffff # unsigned short overflow
+    end
+    "%04x" % sum
+  end
+
   class WindowBuilder
     def initialize(default_path)
       @default_path = default_path

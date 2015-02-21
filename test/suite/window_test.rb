@@ -1,5 +1,4 @@
 
-require 'test/unit'
 require_relative '../../src/lib/window.rb'
 
 include Window
