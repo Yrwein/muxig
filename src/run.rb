@@ -18,7 +18,7 @@ end
 
 # load user config if exists
 config_file = File.expand_path '~/.muxig.rb'
-if File.exists? config_file
+if File.exist? config_file
   proc = Proc.new {}
   eval(File.read(config_file), proc.binding)
 end
