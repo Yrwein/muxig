@@ -5,7 +5,7 @@ require_relative 'size_helper';
 module Tmux
   # Calls system tmux command and returns stripped output
   def self.call(options)
-    result = ` tmux #{options}`.strip!
+    ` tmux #{options}`.strip!
   end
 
   # Executes system command in current pane
