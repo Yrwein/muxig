@@ -43,12 +43,17 @@ module Tmux
       node.commands.each { |c| Tmux.run c }
 
       if node.kind_of? Window::Split
+
+        # compute sizes
         max_size = get_size node.type
         SizeHelper.fill_absolute_sizes! max_size, node.nodes
+
+        # split and resize
+        paneIdQueue = Queue.new
         node.nodes.each_with_index do |child_node, i|
           if i != 0
-            pane = Tmux.call "list-panes | grep active | cut -d: -f1"
-            Tmux.call node.type == :horizontal ? "splitw -h -t #{pane}" : "splitw -v -t #{pane}"
+            paneToSplit = Tmux.call "list-panes | grep active | cut -d: -f1"
+            Tmux.call node.type == :horizontal ? "splitw -h -t #{paneToSplit}" : "splitw -v -t #{paneToSplit}"
             Tmux.call 'last-pane'
             resize_active_pane node.nodes[0].absolute_size, node.type
             Tmux.call 'last-pane'
@@ -57,8 +62,18 @@ module Tmux
           if i == node.nodes.size - 1
             resize_active_pane child_node.absolute_size, node.type
           end
+
+          currentPaneId = Tmux.call "list-panes -F'\#{pane_id} \#{?pane_active,active,no}' | grep active | cut -d' ' -f1"
+          paneIdQueue << currentPaneId
+        end
+
+        # render child panes
+        node.nodes.each_with_index do |child_node, i|
+          nodePane = paneIdQueue.pop
+          Tmux.call "select-pane -t #{nodePane}"
           create_window_node child_node
         end
+
       end
     end
 
