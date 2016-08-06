@@ -5,7 +5,7 @@ require_relative 'size_helper';
 module Tmux
   # Calls system tmux command and returns stripped output
   def self.call(options)
-    ` tmux #{options}`.strip!
+    result = ` tmux #{options}`.strip!
   end
 
   # Executes system command in current pane
@@ -13,7 +13,8 @@ module Tmux
     # f. e. command:
     #    watch --no-title --color -n '1' git branch
     # -> send-keys 'watch --no-title --color -n '''1''' git branch' C-m
-    Tmux.call "send-keys ' " + command.sub(/'/, "'''") + "' C-m"
+    pane = Tmux.call "list-panes | grep active | cut -d: -f1"
+    Tmux.call "send-keys -t #{pane} ' " + command.sub(/'/, "'''") + "' C-m"
   end
 
   def self.clear_panes
@@ -46,7 +47,8 @@ module Tmux
         SizeHelper.fill_absolute_sizes! max_size, node.nodes
         node.nodes.each_with_index do |child_node, i|
           if i != 0
-            Tmux.call node.type == :horizontal ? 'splitw -h' : 'splitw -v'
+            pane = Tmux.call "list-panes | grep active | cut -d: -f1"
+            Tmux.call node.type == :horizontal ? "splitw -h -t #{pane}" : "splitw -v -t #{pane}"
             Tmux.call 'last-pane'
             resize_active_pane node.nodes[0].absolute_size, node.type
             Tmux.call 'last-pane'
