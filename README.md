@@ -10,10 +10,10 @@ It is planned to be configurable tmux manager in future versions.
 sudo make install # uninstall for reverting
 ```
 
-## Own muxig commands
+## Custom muxig commands
 
 Just create ~/.muxig.rb - it will be loaded with each muxig run.
-Conf file has plain ruby syntax with possibility to add own commands:
+Conf file has plain ruby syntax with possibility to add custom commands:
 
     windows['git-cui'] = split :horizontal do
       pane
