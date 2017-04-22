@@ -41,6 +41,9 @@ else
   if windows[command]
     builder = Tmux::WindowBuilder.new `pwd`.strip!
     builder.make_window windows[command]
+
+    window_name = File.basename(Dir.getwd)
+    Tmux::call("rename-window " + window_name)
   else
     puts "muxig: Command *#{command}* is unknown."
   end
