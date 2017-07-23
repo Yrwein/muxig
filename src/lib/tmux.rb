@@ -14,7 +14,7 @@ module Tmux
     #    watch --no-title --color -n '1' git branch
     # -> send-keys 'watch --no-title --color -n '''1''' git branch' C-m
     pane = Tmux.call "list-panes | grep active | cut -d: -f1"
-    Tmux.call "send-keys -t #{pane} ' " + command.sub(/'/, "'''") + "' C-m"
+    Tmux.call "send-keys -t #{pane} ' " + command.gsub(/'/, "'\"'\"'") + "' C-m"
   end
 
   def self.clear_panes
