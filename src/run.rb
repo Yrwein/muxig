@@ -11,8 +11,8 @@ windows = {}
 windows['git-cui'] = split :horizontal do
   pane
   split :vertical, 30 do
-    pane "watch --no-title --color -n '0,3' git status --short -b"
-    pane "watch --no-title --color -n '1' git branch"
+    pane "GIT_INDEX_FILE=.git/muxigindexstatus watch --no-title --color -n '0,3' 'cp .git/index .git/muxigindexstatus && git status --short -b'"
+    pane "GIT_INDEX_FILE=.git/muxigindexbranch watch --no-title --color -n '1' 'cp .git/index .git/muxigindexbranch && git branch'"
   end
 end
 
