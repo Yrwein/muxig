@@ -50,7 +50,7 @@ module Window
       @nodes.push Pane.new new_command, size
     end
 
-    def split(type, size = Node.FLEXIBLE_SIZE, &block)
+    def split(type, size = Node::FLEXIBLE_SIZE, &block)
       split = Split.new type, size
       split.instance_eval(&block)
 
