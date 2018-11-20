@@ -1,8 +1,6 @@
 # muxig
 
-Simple script creating tmux layout for watching git repository state.
-
-It is planned to be configurable tmux manager in future versions.
+A simple script for creating tmux layouts. There is a layout for watching git repository state by default.
 
 ## Install
 
