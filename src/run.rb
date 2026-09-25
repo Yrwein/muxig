@@ -10,7 +10,7 @@ include Window
 windows = {}
 windows['git-cui'] = split :horizontal do
   pane
-  split :vertical, 30 do
+  split :vertical, 45 do
     pane "GIT_INDEX_FILE=.git/muxigindexstatus watch --no-title --color -n '0,3' 'cp .git/index .git/muxigindexstatus && git status --short -b'"
     pane "GIT_INDEX_FILE=.git/muxigindexbranch watch --no-title --color -n '1' 'cp .git/index .git/muxigindexbranch && git branch'"
   end

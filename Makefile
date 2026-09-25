@@ -1,23 +1,10 @@
 
 .DEFAULT_GOAL = help
 
-build:
-	@which ronn \
-		&& { \
-			ronn MANUAL.md; \
-		} \
-		|| { \
-			echo 'Ronn is not installed'; \
-			echo '  http://rtomayko.github.io/ronn/'; \
-			echo '  apt-get install ruby-ronn'; \
-			return 1; \
-		}
-
-install: build uninstall
+install: uninstall
 	mkdir -p /var/lib/muxig
 	cp -r src/* /var/lib/muxig
 	ln -s /var/lib/muxig/run.rb /usr/bin/muxig
-	cp MANUAL.1 /usr/share/man/man1/muxig.1
 	cp src/completion.sh /etc/bash_completion.d/muxig
 	@echo
 	@echo '<muxig> was successfully installed.'
@@ -30,7 +17,7 @@ uninstall:
 
 help:
 	@echo 'Usage:'
-	@echo '  install - installs binary and manual, requires root permissions (build and uninstall is run before this target)'
+	@echo '  install - installs binary, requires root permissions (build and uninstall is run before this target)'
 	@echo '  uninstall - uninstalls all installed files, requires root permissions (even from previous muxig versions)'
 	@echo '  help - shows this help'
 	@echo '  build - builds man page (and in future maybe more stuff?)'
